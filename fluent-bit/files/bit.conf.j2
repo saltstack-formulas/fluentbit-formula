@@ -1,0 +1,71 @@
+{% from "fluent-bit/map.jinja" import bit with context -%}
+
+# WARNING: This file is managed by salt
+# DO NOT EDIT MANUALLY
+{%- if not parsers %}
+[SERVICE]
+    # Flush
+    # =====
+    # Set an interval of seconds before to flush records to a destination
+    Flush        {{ bit.config.flush }}
+
+    # Daemon
+    # ======
+    # Instruct Fluent Bit to run in foreground or background mode.
+    Daemon       {{ bit.config.daemon }}
+{% if bit.config.log_file is defined %}
+    # Log_File
+    # ============
+    # Specify an optional 'log' file
+    Log_File     {{ bit.config.log_file }}
+{% endif %}
+    # Log_Level
+    # =========
+    # Set the verbosity level of the service, values can be:
+    #
+    # - error
+    # - warning
+    # - info
+    # - debug
+    # - trace
+    #
+    # By default 'info' is set, that means it includes 'error' and 'warning'.
+    Log_Level    {{ bit.config.log_level }}
+
+    # Parsers_File
+    # ============
+    # Specify an optional 'Parsers' configuration file
+    Parsers_File {{ bit.config.parsers_file }}
+    Plugins_File {{ bit.config.plugins_file }}
+
+    # HTTP Server
+    # ===========
+    # Enable/Disable the built-in HTTP Server for metrics
+    HTTP_Server  {{ bit.config.http_server }}
+    HTTP_Listen  {{ bit.config.http_listen }}
+    HTTP_Port    {{ bit.config.http_port }}
+    {%- endif %}
+
+    {% macro plugin_config(plugins, type) -%}
+    {%- for plugin in plugins %}
+[{{ type }}]
+      {%- for key, value in plugin.items() %}
+    {{ key }} {{ value }}
+      {%- endfor %}
+    {%- endfor %}
+    {%- endmacro -%}
+
+{% if parsers and bit.config.parsers is defined -%}
+{{ plugin_config(bit.config.parsers, 'PARSER') }}
+{%- endif %}
+{% if not parsers -%}
+{% if bit.config.inputs is defined -%}
+{{ plugin_config(bit.config.inputs, 'INPUT') }}
+{%- endif %}
+{% if bit.config.filters is defined -%}
+{{ plugin_config(bit.config.filters, 'FILTER') }}
+{%- endif %}
+{% if bit.config.outputs is defined -%}
+{{ plugin_config(bit.config.outputs, 'OUTPUT') }}
+{%- endif %}
+{%- endif %}

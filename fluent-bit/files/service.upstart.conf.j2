@@ -1,4 +1,5 @@
-description "Fluentbit log collection service"
+{%- from "fluent-bit/map.jinja" import bit with context -%}
+description "{{ bit.pkg }} log collection service"
 
 start on started network-services
 stop on runlevel [!2345]
@@ -12,4 +13,4 @@ respawn
 
 console log
 
-exec /usr/local/bin/fluent-bit -c /etc/fluent-bit/fluent-bit.conf -R /etc/fluent-bit/parsers.conf
+exec /usr/local/bin/{{ bit.pkg }} -c /etc/{{ bit.pkg }}/{{ bit.pkg }}.conf -R /etc/{{ bit.pkg }}/parsers.conf

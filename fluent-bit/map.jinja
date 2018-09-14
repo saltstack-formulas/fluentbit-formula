@@ -20,27 +20,28 @@ that differ from whats in defaults.yaml
 {% set init_map = salt['grains.filter_by']({
     'systemd': {
       "service": {
-        "conf": '/lib/systemd/system/fluent-bit.service',
+        "unit": '/lib/systemd/system/fluent-bit.service',
         "name": 'fluent-bit'
       }
     },
     'upstart': {
       "service": {
-        "conf": '/etc/init/fluent-bit.conf',
+        "unit": '/etc/init/fluent-bit.conf',
         "name": 'fluent-bit'
       }
     }
-  },
-  grain="init")
+  }
+  , grain="init")
 %}
 {## Merge the flavor_map to the default settings ##}
 {% do default_settings.fluent_bit.update(os_family_map) %}
 {% do default_settings.fluent_bit.update(init_map) %}
 
-{## Merge in fluent_bit:lookup pillar ##}
-{% set fluent_bit = salt['pillar.get'](
+{## Merge in bit:lookup pillar ##}
+{% set bit = salt['pillar.get'](
         'fluent_bit',
         default=default_settings.fluent_bit,
         merge=True
     )
 %}
+

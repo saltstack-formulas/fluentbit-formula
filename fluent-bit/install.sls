@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{% from "fluent-bit/map.jinja" import fluent_bit with context %}
+{% from "fluent-bit/map.jinja" import bit with context %}
 
-fluent-bit-pkg:
+{{ bit.pkg }}-pkg:
   pkg.installed:
-    - name: {{ fluent_bit.pkg }}
+    - name: {{ bit.pkg }}

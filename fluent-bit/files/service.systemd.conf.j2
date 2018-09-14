@@ -1,11 +1,12 @@
+{%- from "fluent-bit/map.jinja" import bit with context -%}
 [Unit]
-Description=Fluent Bit
+Description={{ bit.pkg |replace("-", " ") | title }}
 Requires=network.target
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/fluent-bit -c /etc/fluent-bit/fluent-bit.conf -R /etc/fluent-bit/parsers.conf
+ExecStart=/usr/local/bin/{{ bit.pkg }} -c /etc/{{ bit.pkg }}/{{ bit.pkg }}.conf -R /etc/{{ bit.pkg }}/parsers.conf
 Restart=always
 
 [Install]

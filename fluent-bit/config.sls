@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{% from "fluent-bit/map.jinja" import fluent_bit with context %}
+{% from "fluent-bit/map.jinja" import bit with context %}
 
-fluent-bit-config:
+{{ bit.pkg }}-config:
   file.managed:
-    - name: /etc/fluent-bit/fluent-bit.conf
-    - source: salt://fluent-bit/files/fluent-bit.conf.j2
+    - name: /etc/{{ bit.pkg }}/{{ bit.pkg }}.conf
+    - source: salt://fluent-bit/files/bit.conf.j2
     - mode: 644
     - makedirs: True
     - user: root
@@ -15,10 +15,10 @@ fluent-bit-config:
     - context:
       parsers: False
 
-fluent-bit-parsers:
+{{ bit.pkg }}-parsers:
   file.managed:
-    - name: /etc/fluent-bit/parsers.conf
-    - source: salt://fluent-bit/files/fluent-bit.conf.j2
+    - name: /etc/{{ bit.pkg }}/parsers.conf
+    - source: salt://fluent-bit/files/bit.conf.j2
     - mode: 644
     - makedirs: True
     - user: root

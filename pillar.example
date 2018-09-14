@@ -1,6 +1,16 @@
 fluent_bit:
+  # possible options: td-agent-bit, fluent-bit
+  pkg: td-agent-bit
+  # optional for fluent-bit
+  service:
+    unit: '/lib/systemd/system/td-agent-bit.service'
+    conf: '/etc/td-agent-bit/td-agent-bit.conf'
   config:
     flush: 5
+    daemon: 'Off'
+    # Optional log file
+    log_file: /var/log/td-agent-bit/td-agent-bit.log
+    log_level: debug
     http_monitor: on
     http_port: 2020
     inputs:
@@ -10,7 +20,7 @@ fluent_bit:
         Tag: syslog
         Path: /var/log/syslog
         Path_Key: filename
-        DB: /var/run/fluentbit/syslog
+        DB: /var/run/fluent-bit/syslog
     filters:
       - Name: grep
         Match: syslog
