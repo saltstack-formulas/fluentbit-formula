@@ -2,7 +2,7 @@
 fluentbit-formula
 ================
 
-A SaltStack formula that for installing and configuring fluent-bit and td-agent-bit.
+A SaltStack formula that for installing and configuring fluent-bit (td-agent-bit)
 
 .. note::
 
@@ -34,20 +34,3 @@ Configures the fluent-bit service with upstart/systemd etc
 --------------------
 
 Configures fluent-bit input/output plugins
-
-
-TODO:
-================
-
-- Add repository install
-- Prepare next gen with (will break old format):
-    ``
-    bit:
-      fluent-bit:
-        config:
-          flush: 5
-    bit:
-      td-agent-bit:
-        config:
-          flush: 5
-     ``

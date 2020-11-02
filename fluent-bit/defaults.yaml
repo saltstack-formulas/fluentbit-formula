@@ -2,16 +2,29 @@
 # vim: ft=yaml
 
 fluent_bit:
-  pkg: fluent-bit
-  service:
-    unit: '/lib/systemd/system/fluent-bit.service'
-    conf: '/etc/td-agent-bit/fluent-bit.conf'
-  config:
+  repo:
+    version: buster
+  user: td-agent-bit
+  group: td-agent-bit
+  process_name: td-agent-bit
+  pkg: td-agent-bit
+  agent:
     flush: 5
     daemon: 'Off'
     log_level: info
-    parsers_file: parsers.conf
     plugins_file: plugins.conf
     http_server: 'Off'
     http_listen: 0.0.0.0
     http_port: 2020
+    log_file: false
+    log_file_path: /var/log/td-agent-bit/td-agent-bit.log
+
+  service: true
+  configs:
+    forward:
+      settings:
+        - directive: source
+          attrs:
+            - '@type': forward
+            - port: 24224
+

@@ -1,0 +1,91 @@
+{% from "fluent-bit/map.jinja" import bit with context -%}
+
+# WARNING: This file is managed by salt
+# DO NOT EDIT MANUALLY
+[SERVICE]
+    # Flush
+    # =====
+    # Set an interval of seconds before to flush records to a destination
+    Flush        {{ bit.agent.flush }}
+
+    # Daemon
+    # ======
+    # Instruct Fluent Bit to run in foreground or background mode.
+    Daemon       {{ bit.agent.daemon }}
+
+    # Log_File
+    # ============
+    # Specify an optional 'log' file
+    {% if bit.agent.log_file %}
+    Log_File     {{ bit.agent.log_file }}
+    {% endif %}
+    # Log_Level
+    # =========
+    # Set the verbosity level of the service, values can be:
+    #
+    # - error
+    # - warning
+    # - info
+    # - debug
+    # - trace
+    #
+    # By default 'info' is set, that means it includes 'error' and 'warning'.
+    Log_Level    {{ bit.agent.log_level }}
+
+    # Parsers_File
+    # ============
+    # Specify an optional 'Parsers' configuration file
+    Parsers_File parsers.conf
+    Plugins_File {{ bit.agent.plugins_file }}
+
+    # HTTP Server
+    # ===========
+    # Enable/Disable the built-in HTTP Server for metrics
+    HTTP_Server  {{ bit.agent.http_server }}
+    HTTP_Listen  {{ bit.agent.http_listen }}
+    HTTP_Port    {{ bit.agent.http_port }}
+
+    # Storage
+    # =======
+    # Fluent Bit can use memory and filesystem buffering based mechanisms
+    #
+    # - https://docs.fluentbit.io/manual/administration/buffering-and-storage
+    #
+    # storage metrics
+    # ---------------
+    # publish storage pipeline metrics in '/api/v1/storage'. The metrics are
+    # exported only if the 'http_server' optoin is enabled.
+    #
+    storage.metrics on
+
+    # storage.path
+    # ------------
+    # absolute file system path to store filesystem data buffers (chunks).
+    #
+    # storage.path /tmp/storage
+
+    # storage.sync
+    # ------------
+    # configure the synchronization mode used to store the data into the
+    # filesystem. It can take the values normal or full.
+    #
+    # storage.sync normal
+
+    # storage.checksum
+    # ----------------
+    # enable the data integrity check when writing and reading data from the
+    # filesystem. The storage layer uses the CRC32 algorithm.
+    #
+    # storage.checksum off
+
+    # storage.backlog.mem_limit
+    # -------------------------
+    # if storage.path is set, Fluent Bit will look for data chunks that were
+    # not delivered and are still in the storage layer, these are called
+    # backlog data. This option configure a hint of maximum value of memory
+    # to use when processing these records.
+    #
+    # storage.backlog.mem_limit 5M
+
+
+@INCLUDE conf.d/*.conf
